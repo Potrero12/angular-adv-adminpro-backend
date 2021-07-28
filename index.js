@@ -8,23 +8,19 @@ const { dbConection } = require('./database/config');
 //crear el servidor express
 const app = express();
 
-// Base de datos
-dbConection();
-
-// password mongo - user
-// mean_user
-// psBo8ijaqeuhAjX5
-
 // Configurar cabeceras y cors
 app.use(cors());
 
-//Rutas
-app.get('/', (req, res) => {
-    res.status(200).send({
-        ok: true,
-        message: 'Hola Mundo desde /'
-    })
-})
+//lectura y parseo del body
+app.use(express.json());
+
+// Base de datos
+dbConection();
+
+// Rutas
+app.use('/api/usuarios', require('./routes/usuarios'));
+app.use('/api/auth', require('./routes/auth'));
+
 
 app.listen(process.env.PORT, () => {
     console.log('Servidor corriento en el puerto ' + process.env.PORT);
