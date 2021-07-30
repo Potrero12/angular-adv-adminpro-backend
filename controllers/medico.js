@@ -72,18 +72,89 @@ const crearMedico = async (req, res = response) => {
 
 }
 
-const actualizarMedicos = (req, res = response) => {
-    res.status(200).send({
-        ok: true,
-        msg: 'Hola desde actualizarMedicos'
-    })
+const actualizarMedicos = async(req, res = response) => {
+
+    const idMedico = req.params.id;
+    const uid = req.uid;
+    // const idHospital = req.body.hospital;
+
+    try {
+
+        const existeId = await Medico.findById(idMedico);
+
+        if(!existeId) {
+            res.status(404).send({
+                ok: false,
+                msg: 'El Medico No existe'
+            })
+        }
+
+        // const existeIdHospital = await Medico.findById(idHospital);
+
+        // if(!existeIdHospital) {
+        //     res.status(404).send({
+        //         ok: false,
+        //         msg: 'El Hospital No existe'
+        //     })
+        // }
+
+        const medicoBody = {
+            ...req.body,
+            usuario: uid,
+            // hospital: existeIdHospital
+        }
+
+        //actualizamos medico
+        const medicoActualizado = await Medico.findByIdAndUpdate(idMedico, medicoBody, {new:true});
+
+        res.status(200).send({
+            ok: true,
+            medico: medicoActualizado,
+            msg: 'Medico Actualizado Correctamente'
+        })
+    
+        
+    } catch (error) {
+        res.status(500).send({
+            ok: false,
+            msg: 'Error inesperado en el servidor'
+        })
+    }
+
 }
 
-const BorrarMedico = (req, res = response) => {
-    res.status(200).send({
-        ok: true,
-        msg: 'Hola desde BorrarMedico'
-    })
+const BorrarMedico = async (req, res = response) => {
+
+    const idMedico = req.params.id;
+
+    try {
+
+        const existeId = await Medico.findById(idMedico);
+
+        if(!existeId) {
+            res.status(404).send({
+                ok: false,
+                msg: 'El Medico No existe'
+            })
+        }
+
+        //actualizamos medico
+        const medicoBorrado = await Medico.findByIdAndDelete(idMedico);
+
+        res.status(200).send({
+            ok: true,
+            medico: medicoBorrado,
+            msg: 'Medico Borrado Correctamente'
+        })
+    
+        
+    } catch (error) {
+        res.status(500).send({
+            ok: false,
+            msg: 'Error inesperado en el servidor'
+        })
+    }
+
 }
 
 module.exports = {
