@@ -18,8 +18,8 @@ const {
 
 const router = Router();
 
-router.get('/', getMedicos);
-router.get('/:id', getMedico);
+router.get('/', validarJWT, getMedicos);
+router.get('/:id', validarJWT, getMedico);
 
 router.post('/crear-medico',
     [

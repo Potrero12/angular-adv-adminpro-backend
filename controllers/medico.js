@@ -26,11 +26,11 @@ const getMedico = async(req, res = response) => {
     const medicoId = req.params.id;
 
     try {
-        const medicos = await Medico.findById(medicoId).populate('hospital','nombre').populate('usuario', 'nombre');
+        const medico = await Medico.findById(medicoId).populate('hospital','nombre img').populate('usuario', 'nombre img');
 
         res.status(200).send({
             ok: true,
-            medicos
+            medico
         })
         
     } catch (error) {
